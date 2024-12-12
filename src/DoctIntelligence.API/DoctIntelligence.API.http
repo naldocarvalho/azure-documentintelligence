@@ -1,0 +1,6 @@
+@DoctIntelligence.API_HostAddress = http://localhost:5063
+
+GET {{DoctIntelligence.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
