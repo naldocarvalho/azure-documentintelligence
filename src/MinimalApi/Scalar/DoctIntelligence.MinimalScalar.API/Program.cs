@@ -2,7 +2,6 @@ using Azure;
 using Azure.AI.DocumentIntelligence;
 using Microsoft.OpenApi.Models;
 using Scalar.AspNetCore;
-using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,7 +31,6 @@ app.UseHttpsRedirection();
 
 app.MapPost("/validate/creditcard", async (HttpRequest request, DocumentIntelligenceClient client) =>
 {
-    string jsonValidation = "";
     var listCreditCard = new List<object>();
     var creditCard = new Dictionary<string, object>();
 
@@ -92,10 +90,7 @@ app.MapPost("/validate/creditcard", async (HttpRequest request, DocumentIntellig
         }
     }
 
-    jsonValidation = JsonSerializer.Serialize(listCreditCard);
-
-    return Results.Ok(jsonValidation);
-
+    return Results.Ok(listCreditCard);
 })
 .WithName("ValidateCreditCard")
 .WithOpenApi(x => new OpenApiOperation(x)

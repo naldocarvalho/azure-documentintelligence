@@ -1,7 +1,6 @@
 using Azure;
 using Azure.AI.DocumentIntelligence;
 using Microsoft.OpenApi.Models;
-using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,18 +26,17 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapPost("/validate/creditcard", async (HttpRequest request, DocumentIntelligenceClient client) =>
+app.MapPost("/validate/creditcard", async (IFormFileCollection files, DocumentIntelligenceClient client) =>
 {
-    string jsonValidation = "";
     var listCreditCard = new List<object>();
     var creditCard = new Dictionary<string, object>();
 
-    if (!request.Form.Files.Any())
+    if (!files.Any())
         return Results.BadRequest("Nenhum arquivo enviado.");
 
-    Console.WriteLine($"Quantidade de arquivos enviados: {request.Form.Files.Count}");
+    Console.WriteLine($"Quantidade de arquivos enviados: {files.Count}");
 
-    foreach (var file in request.Form.Files)
+    foreach (var file in files)
     {
         Console.WriteLine($"Arquivo: {file.FileName} - Content-Type = {file.ContentType}");
 
@@ -89,10 +87,7 @@ app.MapPost("/validate/creditcard", async (HttpRequest request, DocumentIntellig
         }
     }
 
-    jsonValidation = JsonSerializer.Serialize(listCreditCard);
-
-    return Results.Ok(jsonValidation);
-
+    return Results.Ok(listCreditCard);
 })
 .WithName("ValidateCreditCard")
 .WithOpenApi(x => new OpenApiOperation(x)
@@ -101,6 +96,6 @@ app.MapPost("/validate/creditcard", async (HttpRequest request, DocumentIntellig
     Description = "Retorna se o cartão de crédito é valido com suas informações",
     Tags = new List<OpenApiTag> { new() { Name = "Hub IA Services" } }
 })
-.Accepts<List<IFormFile>>("multipart/form-data");
+.DisableAntiforgery();
 
 app.Run();
