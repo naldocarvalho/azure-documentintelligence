@@ -22,7 +22,7 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.MapScalarApiReference(options =>
-        options.WithTitle("Azure Document Intelligence")
+        options.WithTitle("Azure Document Intelligence Api")
         .WithTheme(ScalarTheme.Saturn)
         .WithDefaultHttpClient(ScalarTarget.Shell, ScalarClient.Curl)
     );
