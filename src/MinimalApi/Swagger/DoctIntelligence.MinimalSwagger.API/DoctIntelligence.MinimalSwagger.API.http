@@ -1,0 +1,6 @@
+@DoctIntelligence.MinimalSwagger.API_HostAddress = http://localhost:5147
+
+POST {{DoctIntelligence.MinimalSwagger.API_HostAddress}}/validate/creditcard/
+Accept: application/json
+
+###
